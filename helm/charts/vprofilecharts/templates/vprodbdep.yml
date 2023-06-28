@@ -1,31 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vprodb
+  name: vproapp
   labels:
-    app: vprodb
+    app: vproapp
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: vprodb
-  replicas: 1
+      app: vproapp
   template:
     metadata:
       labels:
-        app: vprodb
+        app: vproapp
     spec:
       containers:
-        - name: vprodb
+        - name: vproapp
           image: dash007/vprofileapp:latest
           ports:
-            - name: vprodb-port
-              containerPort: 3306
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: app-secret
-                  key: db-pass
+            - name: vproapp-port
+              containerPort: 8080
+      initContainers: # it will launch this container and after this the previous one
+        - name: init-mydb
+          image: busybox
+          command: # this is a dependency for app on db and cache, so until they are ready it will wait to launch
+            [
+              'sh',
+              '-c',
+              'until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;',
+            ]
+        - name: init-memcache
+          image: busybox
+          command:
+            [
+              'sh',
+              '-c',
+              'until nslookup vprocache01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;',
+            ]
 #        env:
 #         - name: MYSQL_ROOT_PASSWORD
 #           value: "vprodbpass"
