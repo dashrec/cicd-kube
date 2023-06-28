@@ -12,20 +12,19 @@ spec:
   template:
     metadata:
       labels:
-        app: vpromq01
+        app: vpromq01 # this will be a label of pod
     spec:
       containers:
-      - name: vpromq01
-        image: rabbitmq
-        ports:
-        - name: vpromq01-port
-          containerPort: 15672
-        env: 
-         - name: RABBITMQ_DEFAULT_PASS
-           valueFrom:
-             secretKeyRef:
-               name: app-secret
-               key: rmq-pass
-         - name: RABBITMQ_DEFAULT_USER
-           value: "test"
-
+        - name: vpromq01
+          image: rabbitmq
+          ports:
+            - name: vpromq01-port
+              containerPort: 15672
+          env:
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: rmq-pass # we already encoded
+            - name: RABBITMQ_DEFAULT_USER
+              value: 'guest'
