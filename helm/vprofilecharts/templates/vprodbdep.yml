@@ -16,12 +16,12 @@ spec:
     spec:
       containers:
         - name: vprodb
-          image: dash007/vprofiledb:latest 
+          image: dash007/vprofiledb:latest
           securityContext:
             runAsUser: 999
           volumeMounts:
             - mountPath: /mount/data
-              name: vpro-db-data
+              name: vpro-db-data2
           ports:
             - name: vprodb-port
               containerPort: 3306
@@ -34,7 +34,7 @@ spec:
       nodeSelector:
         zone: us-east-1a
       volumes:
-        - name: vpro-db-data
+        - name: vpro-db-data2
           # This AWS EBS volume must already exist.
           awsElasticBlockStore:
             volumeID: vol-0b0a7cae742bf30f1
