@@ -23,11 +23,11 @@ spec:
       initContainers:
         - name: init-mydb
           image: busybox
-          command:
+          command: # this is a dependency for app on db and cache, so until they are ready it will wait to launch
             [
               'sh',
               '-c',
-              'until nslookup vprodb; do echo waiting for mydb; sleep 2; done;',
+              'until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;',
             ]
         - name: init-memcache
           image: busybox
@@ -35,5 +35,5 @@ spec:
             [
               'sh',
               '-c',
-              'until nslookup vprocache01; do echo waiting for mydb; sleep 2; done;',
+              'until nslookup vprocache01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;',
             ]
