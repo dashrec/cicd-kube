@@ -20,7 +20,7 @@ spec:
           securityContext:
             runAsUser: 999
           volumeMounts:
-            - mountPath: /mnt/data
+            - mountPath: /mount/data
               name: vpro-db-data
           ports:
             - name: vprodb-port
