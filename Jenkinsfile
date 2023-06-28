@@ -108,3 +108,4 @@ pipeline {
 
 
 }
+// passing image name and tagss in charts to deply latest image to kube cluster
