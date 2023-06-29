@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
         - name: vproapp
-          image: {{ .Values.appimage }}
+          image: image: {{ .Values.appimage }}
           ports:
             - name: vproapp-port
               containerPort: 8080
-      initContainers:
+      initContainers: # it will launch this container and after this the previous one
         - name: init-mydb
           image: busybox
           command: # this is a dependency for app on db and cache, so until they are ready it will wait to launch
