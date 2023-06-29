@@ -103,7 +103,7 @@ pipeline {
 
 
         stage('Kubernetes Deploy') {
-	  agent { label 'KOPS' }
+	  agent { label 'KOPS' } // KOPS is a name of configured node in jenkins which has token of kops
             steps {
                     sh "helm upgrade --install --force vproifle-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod" // this namesapce we created in kops instance
             }
